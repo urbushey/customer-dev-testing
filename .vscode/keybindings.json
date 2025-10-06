@@ -1,0 +1,58 @@
+[
+  {
+    "key": "ctrl+enter",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🕒 Run SQL (5s Poll Interval)",
+    "when": "editorTextFocus && editorLangId == sql",
+    "os": "windows|linux"
+  },
+  {
+    "key": "cmd+enter",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🕒 Run SQL (5s Poll Interval)",
+    "when": "editorTextFocus && editorLangId == sql",
+    "os": "macos"
+  },
+  {
+    "key": "ctrl+1",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🚀 Run Current SQL File (Create View)",
+    "when": "editorTextFocus && editorLangId == sql",
+    "os": "windows|linux"
+  },
+  {
+    "key": "cmd+1",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🚀 Run Current SQL File (Create View)",
+    "when": "editorTextFocus && editorLangId == sql",
+    "os": "macos"
+  },
+  {
+    "key": "ctrl+shift+d",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🗑️ Delete Datasets (Interactive)",
+    "when": "editorTextFocus",
+    "os": "windows|linux"
+  },
+  {
+    "key": "cmd+shift+d",
+    "command": "workbench.action.tasks.runTask",
+    "args": "🗑️ Delete Datasets (Interactive)",
+    "when": "editorTextFocus",
+    "os": "windows|linux"
+  },
+  {
+    "key": "ctrl+shift+l",
+    "command": "workbench.action.tasks.runTask",
+    "args": "📋 List All Datasets",
+    "when": "editorTextFocus",
+    "os": "windows|linux"
+  },
+  {
+    "key": "cmd+shift+l",
+    "command": "workbench.action.tasks.runTask",
+    "args": "📋 List All Datasets",
+    "when": "editorTextFocus",
+    "os": "windows|linux"
+  }
+]

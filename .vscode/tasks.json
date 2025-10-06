@@ -1,0 +1,123 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "🚀 Run Current SQL File",
+      "type": "shell",
+      "command": "bun run query_executor.ts -f ${file} --log",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "icon": {
+        "color": "terminal.ansiGreen",
+        "id": "play"
+      }
+    },
+    {
+      "label": "🚀 Run Current SQL File (Create View)",
+      "type": "shell",
+      "command": "bun run query_executor.ts -f ${file} --create-view --log",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "icon": {
+        "color": "terminal.ansiGreen",
+        "id": "play"
+      }
+    },
+    {
+      "label": "🔢 Run SQL (Limit 1000 Rows)",
+      "type": "shell",
+      "command": "bun run query_executor.ts -f ${file} -l 1000 --log",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "icon": {
+        "color": "terminal.ansiBlue",
+        "id": "output"
+      }
+    },
+    {
+      "label": "⏱️ Run SQL (No Result Polling)",
+      "type": "shell",
+      "command": "bun run query_executor.ts -f ${file} --no-poll --log",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "icon": {
+        "color": "terminal.ansiYellow",
+        "id": "zap"
+      }
+    },
+    {
+      "label": "🕒 Run SQL (5s Poll Interval)",
+      "type": "shell",
+      "command": "bun run query_executor.ts -f ${file} -p 5 --log",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "icon": {
+        "color": "terminal.ansiMagenta",
+        "id": "watch"
+      }
+    },
+    {
+      "label": "📋 List All Datasets",
+      "type": "shell",
+      "command": "bun run query_executor.ts --list-datasets",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "icon": {
+        "color": "terminal.ansiCyan",
+        "id": "list-flat"
+      }
+    },
+    {
+      "label": "🗑️ Delete Datasets (Interactive)",
+      "type": "shell",
+      "command": "bun run query_executor.ts --delete-dataset interactive",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": [],
+      "icon": {
+        "color": "terminal.ansiRed",
+        "id": "trash"
+      }
+    }
+  ]
+}

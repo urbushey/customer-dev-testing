@@ -1,0 +1,4 @@
+
+    SELECT t._rosetta_stone.mobile_id_unique_identifier AS mobile_id_unique_identifier
+
+    FROM company_data.ADDRESSABLE_AUDIENCE AS t

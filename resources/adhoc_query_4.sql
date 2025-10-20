@@ -9,12 +9,12 @@ WITH id_level_data AS (
             END
         ) AS f1
     FROM company_data.ADDRESSABLE_AUDIENCE AS t
-    WHERE t._rosetta_stone.sha256_hashed_email.type IS NOT NULL
-        AND t._rosetta_stone.sha256_hashed_email."value" IS NOT NULL
-        OR t._rosetta_stone.sha256_hashed_phone_number.type IS NOT NULL
-        AND t._rosetta_stone.sha256_hashed_phone_number."value" IS NOT NULL
-        OR t._rosetta_stone.mobile_id_unique_identifier.type IS NOT NULL
-        AND t._rosetta_stone.mobile_id_unique_identifier."value" IS NOT NULL
+    WHERE (t._rosetta_stone.sha256_hashed_email.type IS NOT NULL
+        AND t._rosetta_stone.sha256_hashed_email."value" IS NOT NULL)
+        OR (t._rosetta_stone.sha256_hashed_phone_number.type IS NOT NULL
+        AND t._rosetta_stone.sha256_hashed_phone_number."value" IS NOT NULL)
+        OR (t._rosetta_stone.mobile_id_unique_identifier.type IS NOT NULL
+        AND t._rosetta_stone.mobile_id_unique_identifier."value" IS NOT NULL)   
     GROUP BY t._rosetta_stone.sha256_hashed_email,
         t._rosetta_stone.sha256_hashed_phone_number,
         t._rosetta_stone.mobile_id_unique_identifier

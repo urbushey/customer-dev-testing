@@ -1,0 +1,67 @@
+CREATE MATERIALIZED VIEW "TEST_MERGE_WITH_STRUCT_VALUE" DISPLAY_NAME = 'TEST_MERGE_WITH_STRUCT' DESCRIPTION = 'Test merge query with struct' TAGS = ('_nio_audience') AS
+SELECT company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.sha256_hashed_email AS sha256_hashed_email,
+    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.sha256_hashed_phone_number AS sha256_hashed_phone_number,
+    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.mobile_id_unique_identifier AS mobile_id_unique_identifier,
+    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.narrative_id AS narrative_id,
+    CURRENT_TIMESTAMP AS last_modified_at
+FROM company_data.ADDRESSABLE_AUDIENCE
+WHERE (
+        company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.generational_cohort = 'Millennials'
+    )
+    AND (
+        (
+            (
+                (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.sha256_hashed_email.type IS NOT NULL
+                )
+                AND (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.sha256_hashed_email."value" IS NOT NULL
+                )
+            )
+            OR (
+                (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.sha256_hashed_phone_number.type IS NOT NULL
+                )
+                AND (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.sha256_hashed_phone_number."value" IS NOT NULL
+                )
+            )
+            OR (
+                (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.mobile_id_unique_identifier.type IS NOT NULL
+                )
+                AND (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.mobile_id_unique_identifier."value" IS NOT NULL
+                )
+            )
+            OR (
+                (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.narrative_id.type IS NOT NULL
+                )
+                AND (
+                    company_data.ADDRESSABLE_AUDIENCE._rosetta_stone.narrative_id."value" IS NOT NULL
+                )
+            )
+        )
+    ) MERGE ON target.sha256_hashed_email."value" IS NOT DISTINCT
+FROM source.sha256_hashed_email."value"
+    AND target.sha256_hashed_phone_number."value" IS NOT DISTINCT
+FROM source.sha256_hashed_phone_number."value"
+    AND target.mobile_id_unique_identifier."value" IS NOT DISTINCT
+FROM source.mobile_id_unique_identifier."value"
+    AND target.narrative_id."value" IS NOT DISTINCT
+FROM source.narrative_id."value"
+    AND target.last_modified_at > current_timestamp - interval '604800' second
+    WHEN NOT MATCHED THEN
+INSERT (
+        sha256_hashed_email,
+        sha256_hashed_phone_number,
+        mobile_id_unique_identifier,
+        narrative_id,
+        last_modified_at
+    )  VALUES (
+        source.sha256_hashed_email,
+        source.sha256_hashed_phone_number,
+        source.mobile_id_unique_identifier,
+        source.narrative_id,
+        source.last_modified_at)

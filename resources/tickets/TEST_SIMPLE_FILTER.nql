@@ -1,0 +1,54 @@
+CREATE MATERIALIZED VIEW "TEST_SIMPLE_FILTER" EXPIRE = 'P1D' 
+ AS 
+ 
+ WITH id_level_data AS (
+    SELECT t._rosetta_stone.sha256_hashed_email AS sha256_hashed_email,
+        t._rosetta_stone.mobile_id_unique_identifier AS mobile_id_unique_identifier,
+        t._rosetta_stone.narrative_id AS narrative_id,
+        MAX(
+            CASE
+                WHEN (t._rosetta_stone.hl7_gender.gender = 'male') THEN 1
+                ELSE 0
+            END
+        ) AS f1
+    FROM company_data.Audience_Builder_Test_Dataset_ AS t
+    WHERE (
+            (
+                (
+                    t._rosetta_stone.sha256_hashed_email.type IS NOT NULL
+                )
+                AND (
+                    t._rosetta_stone.sha256_hashed_email."value" IS NOT NULL
+                )
+            )
+            OR (
+                (
+                    t._rosetta_stone.mobile_id_unique_identifier.type IS NOT NULL
+                )
+                AND (
+                    t._rosetta_stone.mobile_id_unique_identifier."value" IS NOT NULL
+                )
+            )
+            OR (
+                (t._rosetta_stone.narrative_id.type IS NOT NULL)
+                AND (
+                    t._rosetta_stone.narrative_id."value" IS NOT NULL
+                )
+            )
+        )
+    GROUP BY t._rosetta_stone.sha256_hashed_email,
+        t._rosetta_stone.mobile_id_unique_identifier,
+        t._rosetta_stone.narrative_id
+)
+SELECT COUNT(
+        CASE
+            WHEN (f1 = 1) THEN 1
+        END
+    ) AS full_query_count,
+    COUNT(
+        CASE
+            WHEN f1 = 1 THEN 1
+        END
+    ) AS f1_count
+FROM id_level_data
+LIMIT 1000 ROWS

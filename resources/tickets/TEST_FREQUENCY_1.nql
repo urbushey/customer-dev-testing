@@ -1,0 +1,122 @@
+CREATE MATERIALIZED VIEW "TEST_FREQUENCY_1" EXPIRE = 'P1D' TAGS = ('_nio_interactive') 
+
+AS WITH id_level_data AS (
+    SELECT t._rosetta_stone.mobile_id_unique_identifier AS mobile_id_unique_identifier,
+        t._rosetta_stone.narrative_id AS narrative_id,
+        t._rosetta_stone.sha256_hashed_email AS sha256_hashed_email,
+        MAX(
+            CASE
+                WHEN (
+                    t._rosetta_stone.merchant.name IN (
+                        'Target',
+                        'Amazon',
+                        'Sephora',
+                        'IKEA',
+                        'Best Buy'
+                    )
+                ) THEN 1
+                ELSE 0
+            END
+        ) AS "f1",
+        APPROX_COUNT_DISTINCT(
+            CASE
+                WHEN (
+                    t._rosetta_stone.merchant.name IN (
+                        'Target',
+                        'Amazon',
+                        'Sephora',
+                        'IKEA',
+                        'Best Buy'
+                    )
+                ) THEN t._rosetta_stone.event_timestamp
+            END
+        ) AS "f1_freq"
+    FROM company_data.Audience_Builder_Test_Dataset_ AS t
+    WHERE (
+            (
+                (
+                    t._rosetta_stone.mobile_id_unique_identifier.type IS NOT NULL
+                )
+                AND (
+                    t._rosetta_stone.mobile_id_unique_identifier."value" IS NOT NULL
+                )
+            )
+            OR (
+                (t._rosetta_stone.narrative_id.type IS NOT NULL)
+                AND (
+                    t._rosetta_stone.narrative_id."value" IS NOT NULL
+                )
+            )
+        )
+        AND (
+            (
+                (
+                    t._rosetta_stone.sha256_hashed_email.type IS NOT NULL
+                )
+                AND (
+                    t._rosetta_stone.sha256_hashed_email."value" IS NOT NULL
+                )
+            )
+            OR (
+                (
+                    t._rosetta_stone.mobile_id_unique_identifier.type IS NOT NULL
+                )
+                AND (
+                    t._rosetta_stone.mobile_id_unique_identifier."value" IS NOT NULL
+                )
+            )
+            OR (
+                (t._rosetta_stone.narrative_id.type IS NOT NULL)
+                AND (
+                    t._rosetta_stone.narrative_id."value" IS NOT NULL
+                )
+            )
+        )
+        AND (
+            (
+                (
+                    t._rosetta_stone.sha256_hashed_email.type IS NOT NULL
+                )
+                AND (
+                    t._rosetta_stone.sha256_hashed_email."value" IS NOT NULL
+                )
+            )
+            OR (
+                (
+                    t._rosetta_stone.mobile_id_unique_identifier.type IS NOT NULL
+                )
+                AND (
+                    t._rosetta_stone.mobile_id_unique_identifier."value" IS NOT NULL
+                )
+            )
+            OR (
+                (t._rosetta_stone.narrative_id.type IS NOT NULL)
+                AND (
+                    t._rosetta_stone.narrative_id."value" IS NOT NULL
+                )
+            )
+        )
+    GROUP BY t._rosetta_stone.mobile_id_unique_identifier,
+        t._rosetta_stone.narrative_id,
+        t._rosetta_stone.sha256_hashed_email
+)
+SELECT COUNT(
+        CASE
+            WHEN (
+                "f1" = 1
+                AND "f1_freq" >= 2
+            ) THEN 1
+        END
+    ) AS full_query_count,
+    COUNT(
+        CASE
+            WHEN "f1" = 1 THEN 1
+        END
+    ) AS f1_count,
+    COUNT(
+        CASE
+            WHEN "f1" = 1
+            AND "f1_freq" >= 2 THEN 1
+        END
+    ) AS f1_count_frequency
+FROM id_level_data LIMIT 1000 ROWS

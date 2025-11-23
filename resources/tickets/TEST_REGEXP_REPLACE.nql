@@ -1,0 +1,9 @@
+CREATE MATERIALIZED VIEW "TEST_REGEXP_REPLACE"
+AS
+WITH input AS (
+    SELECT 'SEARCH OVER THIS STRING: TO FIND THIS' as the_string
+)
+SELECT
+    the_string,
+    REGEXP_REPLACE(the_string, 'TO FIND THIS') as extracted_text
+FROM input;

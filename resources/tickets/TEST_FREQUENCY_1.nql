@@ -119,4 +119,3 @@ SELECT COUNT(
             AND "f1_freq" >= 2 THEN 1
         END
     ) AS f1_count_frequency
-FROM id_level_data LIMIT 1000 ROWS
